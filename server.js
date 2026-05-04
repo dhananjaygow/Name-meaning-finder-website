@@ -3,7 +3,7 @@ const fs = require("fs");
 const csv = require("csv-parser");
 
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
 let namesData = [];
 

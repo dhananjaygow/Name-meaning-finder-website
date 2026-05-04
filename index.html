@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Name Meaning Finder</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 30px;
+            padding: 50px;
+            max-width: 600px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h1 {
+            color: #667eea;
+            text-align: center;
+            margin-bottom: 15px;
+            font-size: 2.5em;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 40px;
+            font-size: 1.1em;
+        }
+
+        .input-group {
+            margin-bottom: 30px;
+        }
+
+        input {
+            width: 100%;
+            padding: 18px 25px;
+            font-size: 1.1em;
+            border: 2px solid #e0e0e0;
+            border-radius: 15px;
+            outline: none;
+            transition: all 0.3s ease;
+            background: #f8f9fa;
+        }
+
+        input:focus {
+            border-color: #667eea;
+            background: white;
+            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+        }
+
+        button {
+            width: 100%;
+            padding: 18px;
+            font-size: 1.2em;
+            font-weight: 600;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.6);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .result {
+            margin-top: 35px;
+            padding: 30px;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            border-radius: 20px;
+            display: none;
+            animation: slideIn 0.5s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .result.show {
+            display: block;
+        }
+
+        .name-title {
+            font-size: 2em;
+            color: #667eea;
+            margin-bottom: 15px;
+            text-align: center;
+            font-weight: 700;
+        }
+
+        .meaning-label {
+            font-weight: 600;
+            color: #555;
+            margin-bottom: 8px;
+            font-size: 0.95em;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .meaning-text {
+            color: #333;
+            line-height: 1.8;
+            margin-bottom: 20px;
+            font-size: 1.05em;
+        }
+
+        .origin {
+            display: inline-block;
+            padding: 8px 20px;
+            background: #667eea;
+            color: white;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: 600;
+            margin-top: 10px;
+        }
+
+        .loading {
+            text-align: center;
+            color: #667eea;
+            font-weight: 600;
+            margin-top: 20px;
+            display: none;
+        }
+
+        .loading.show {
+            display: block;
+        }
+
+        .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .error {
+            color: #e74c3c;
+            text-align: center;
+            margin-top: 15px;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>✨ Name Meaning Finder</h1>
+        <p class="subtitle">Discover the beautiful meaning behind any name</p>
+        
+        <div class="input-group">
+            <input type="text" id="nameInput" placeholder="Enter a name..." autocomplete="off">
+        </div>
+        
+        <button onclick="findMeaning()">Find Meaning</button>
+        
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <p>Searching for meaning...</p>
+        </div>
+        
+        <div class="result" id="result">
+            <div class="name-title" id="nameTitle"></div>
+            <div class="meaning-label">Meaning</div>
+            <div class="meaning-text" id="meaningText"></div>
+            
+        </div>
+        
+        <div class="error" id="error"></div>
+    </div>
+
+    <script>
+       const input = document.getElementById('nameInput');
+    const loading = document.getElementById('loading');
+    const result = document.getElementById('result');
+    const error = document.getElementById('error');
+
+    input.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            findMeaning();
+        }
+    });
+
+    async function findMeaning() {
+        const name = input.value.trim();
+
+        if (!name) {
+            showError('Please enter a name');
+            return;
+        }
+
+        error.textContent = '';
+        result.classList.remove('show');
+        loading.classList.add('show');
+
+        try {
+            const response = await fetch(`http://localhost:3000/search?name=${name}`);
+            const data = await response.json();
+
+            if (data.Name) {
+                displayResult(data.Name, data.Meaning);
+            } else {
+                showError("Name not found");
+            }
+
+        } catch (err) {
+            console.error(err);
+            showError('Server error. Is backend running?');
+        } finally {
+            loading.classList.remove('show');
+        }
+    }
+
+    function displayResult(name, meaning, origin) {
+        document.getElementById('nameTitle').textContent = name;
+        document.getElementById('meaningText').textContent = meaning;
+        result.classList.add('show');
+    }
+
+    function showError(message) {
+        error.textContent = message;
+        setTimeout(() => {
+            error.textContent = '';
+        }, 3000);
+    }
+    </script>
+</body>
+</html>
